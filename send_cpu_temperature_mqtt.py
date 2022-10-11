@@ -7,6 +7,8 @@ import numpy as np
 from termcolor import colored
 import random
 from helpers.running_mean import running_mean
+from helpers.MeasurementType import MeasurementType , averageMeasurament, MaxMeasurament
+
 
 MOSQUITO_CLIENT_NAME = socket.gethostname() + '_cpu_temperature_mqtt_' + str(random.randint(1,10000))
 
@@ -24,6 +26,13 @@ REPETITIONS_SLEEP_TIME_SECS = 10
 
 # LENGTH OF THE MOVING AVERAGE ARRAY
 TEMPERATURE_ARRAY_MAX_POSITIONS = 6
+
+
+# N cores
+N_CORES = 2
+
+# AVERAGE MEASUREMENT OR MAX
+TYPE_MEASUREMENT = MeasurementType.AVERAGE
 
 
 client = mqtt.Client(MOSQUITO_CLIENT_NAME, clean_session=True)
@@ -50,7 +59,10 @@ while True:
   try:
     cpu_temp_avg = 0
     for _ in range(REPETITIONS):
-      cpu_temp = float(os.popen('sysctl dev.cpu.0.temperature').read()[23:27])
+      if TYPE_MEASUREMENT == MeasurementType.AVERAGE:
+        cpu_temp = averageMeasurament(N_CORES)
+      else:
+        cpu_temp = MaxMeasurament(N_CORES)
       cpu_temp_avg = running_mean(cpu_temp, TEMPERATURE_ARRAY_MAX_POSITIONS, TEMPERATURE_ARRAY)
       time.sleep(REPETITIONS_SLEEP_TIME_SECS)
       
@@ -61,3 +73,5 @@ while True:
     print(colored(e, 'red'))
 
 
+
+ 
