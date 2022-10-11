@@ -1,0 +1,1 @@
+# mqtt_OPNsense_cpu_temperature
