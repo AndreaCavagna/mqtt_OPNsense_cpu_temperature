@@ -29,7 +29,7 @@ TEMPERATURE_ARRAY_MAX_POSITIONS = 6
 
 
 # N cores
-N_CORES = 1
+N_CORES = 2
 
 # AVERAGE MEASUREMENT OR MAX
 TYPE_MEASUREMENT = MeasurementType.AVERAGE
@@ -63,6 +63,7 @@ while True:
         cpu_temp = averageMeasurament(N_CORES)
       else:
         cpu_temp = MaxMeasurament(N_CORES)
+
       cpu_temp_avg = running_mean(cpu_temp, TEMPERATURE_ARRAY_MAX_POSITIONS, TEMPERATURE_ARRAY)
       time.sleep(REPETITIONS_SLEEP_TIME_SECS)
       
